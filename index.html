@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Website Unblocker</title>
+</head>
+<body>
+    <h1>Website Unblocker</h1>
+    <form id="unblock-form">
+        <input type="text" id="url-input" name="url" placeholder="Enter URL">
+        <button type="submit">Unblock</button>
+    </form>
+    <div id="response-container"></div>
+
+    <script>
+        // Handle form submission
+        document.getElementById('unblock-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            unblockWebsite();
+        });
+
+        // Unblock website function
+        function unblockWebsite() {
+            var urlInput = document.getElementById('url-input').value;
+            var responseContainer = document.getElementById('response-container');
+
+            if (!urlInput) {
+                responseContainer.innerHTML = "Missing 'url' parameter";
+                return;
+            }
+
+            var apiUrl = "/api/unblock?url=" + encodeURIComponent(urlInput);
+
+            // Make API request
+            fetch(apiUrl)
+                .then(function(response) {
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+                    return response.text();
+                })
+                .then(function(data) {
+                    responseContainer.innerHTML = data;
+                })
+                .catch(function(error) {
+                    responseContainer.innerHTML = "Error: " + error.message;
+                });
+        }
+    </script>
+</body>
+</html>
